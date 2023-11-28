@@ -1,6 +1,8 @@
 package ru.netology.card_transfer_service.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import ru.netology.card_transfer_service.domain.Enums.Currency;
 import ru.netology.card_transfer_service.domain.Enums.OperationStatus;
 import ru.netology.card_transfer_service.dto.request.TransferRequestDTO;
@@ -11,6 +13,8 @@ import java.util.Random;
 import java.util.UUID;
 
 @Data
+@Accessors(chain = true)
+@NoArgsConstructor
 public class Operation {
     private UUID operationId;
     private OperationStatus status;
@@ -24,7 +28,9 @@ public class Operation {
     public Operation(TransferRequestDTO transferRequestDTO) {
         this.operationId = UUID.randomUUID();
         this.status = OperationStatus.NEED_CONFIRM;
-        this.confirmCode = String.valueOf(random.nextInt(10000));
+        this.confirmCode = "0000";
+//        Для ФТ код всегда равен "0000". Но реализация изначально подразумевала случайное 4-значеное число
+//        this.confirmCode = String.valueOf(random.nextInt(10000));
         this.cardFromNumber = transferRequestDTO.getCardFromNumber();
         this.cardToNumber = transferRequestDTO.getCardToNumber();
         this.amount = transferRequestDTO.getAmount().getValue();

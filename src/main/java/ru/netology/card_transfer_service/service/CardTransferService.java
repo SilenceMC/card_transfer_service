@@ -25,32 +25,33 @@ public class CardTransferService {
         this.repository = repository;
     }
 
-    public boolean isRequestValid(TransferRequestDTO transferRequestDto) {
-        Optional<Card> cardFrom = repository.getCard(transferRequestDto.getCardFromNumber());
+    public boolean isRequestValid(TransferRequestDTO transferRequestDTO) {
+
+        Optional<Card> cardFrom = repository.getCard(transferRequestDTO.getCardFromNumber());
         if (cardFrom.isEmpty())
             throw new CardValidateException("Карта списания не найдена");
-        if (!cardFrom.get().getValidTill().equals(transferRequestDto.getCardFromValidTill()))
+        if (!cardFrom.get().getValidTill().equals(transferRequestDTO.getCardFromValidTill()))
             throw new CardValidateException("Срок действия карты некорректный");
-        if (!cardFrom.get().getCvv().equals(transferRequestDto.getCardFromCVV()))
+        if (!cardFrom.get().getCvv().equals(transferRequestDTO.getCardFromCVV()))
             throw new CardValidateException("CVV-код некорректный");
 
-        Optional<Card> cardTo = repository.getCard(transferRequestDto.getCardToNumber());
+        Optional<Card> cardTo = repository.getCard(transferRequestDTO.getCardToNumber());
         if (cardTo.isEmpty())
             throw new CardValidateException("Карта зачисления не найдена");
         return true;
     }
 
-    public boolean isTransferPossible(TransferRequestDTO transferRequestDto) {
-        String accountFrom = repository.getCard(transferRequestDto.getCardFromNumber()).get().getAccountNumber();
-        if (repository.getAccount(accountFrom).getValue() < transferRequestDto.getAmount().getValue())
+    public boolean isTransferPossible(TransferRequestDTO transferRequestDTO) {
+        String accountFrom = repository.getCard(transferRequestDTO.getCardFromNumber()).get().getAccountNumber();
+        if (repository.getAccount(accountFrom).getValue() < transferRequestDTO.getAmount().getValue())
             throw new CardValidateException("Недостаточно средств на счете карты списания");
         return true;
     }
 
 
-    public Status200ResponseDTO cardToCardTransfer(TransferRequestDTO transferRequestDto) throws IOException {
-        if (isRequestValid(transferRequestDto) & isTransferPossible(transferRequestDto)){
-            return Status200ResponseDTOMapper.toDto(repository.createTransferOperation(transferRequestDto));
+    public Status200ResponseDTO cardToCardTransfer(TransferRequestDTO transferRequestDTO) throws IOException {
+        if (isRequestValid(transferRequestDTO) & isTransferPossible(transferRequestDTO)){
+            return Status200ResponseDTOMapper.toDto(repository.createTransferOperation(transferRequestDTO));
         }
         return null;
     }
