@@ -16,7 +16,6 @@ import ru.netology.card_transfer_service.util.mapper.Status400ResponseDTOMapper;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/")
@@ -29,7 +28,7 @@ public class CardTransferController {
 
     @PostMapping("/transfer")
     public Status200ResponseDTO transfer(@RequestBody @Validated TransferRequestDTO transferRequestDto) throws IOException {
-        return service.cardToCardTransfer(transferRequestDto);
+        return service.createTransferOperation(transferRequestDto);
     }
 
     @PostMapping("/confirmOperation")

@@ -5,11 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import ru.netology.card_transfer_service.domain.Account;
 import ru.netology.card_transfer_service.domain.Card;
+import ru.netology.card_transfer_service.domain.Enums.Currency;
 import ru.netology.card_transfer_service.domain.Enums.OperationStatus;
 import ru.netology.card_transfer_service.domain.Operation;
 import ru.netology.card_transfer_service.dto.request.AmountDTO;
@@ -18,14 +17,12 @@ import ru.netology.card_transfer_service.dto.request.TransferRequestDTO;
 import ru.netology.card_transfer_service.exception.CardValidateException;
 import ru.netology.card_transfer_service.exception.OperationException;
 import ru.netology.card_transfer_service.repository.CardTransferRepository;
-import ru.netology.card_transfer_service.util.mapper.Status200ResponseDTOMapper;
 
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +47,7 @@ class CardTransferServiceTest {
         }
 
         @Test
-        void isRequestValid_ValidTill_Test() {
+        void isRequestValid_ValidTillIncorrect_Test() {
             TransferRequestDTO transferRequestDTO = new TransferRequestDTO();
             when(repository.getCard("1234123412341234"))
                     .thenReturn(Optional.of(new Card().setValidTill("12/24")));
@@ -63,7 +60,7 @@ class CardTransferServiceTest {
         }
 
         @Test
-        void isRequestValid_CVV_Test() {
+        void isRequestValid_CVVIncorrect_Test() {
             TransferRequestDTO transferRequestDTO = new TransferRequestDTO();
             when(repository.getCard("1234123412341234"))
                     .thenReturn(Optional.of(new Card().setValidTill("12/24").setCvv("123")));
@@ -77,18 +74,49 @@ class CardTransferServiceTest {
         }
 
         @Test
+        void isRequestValid_CurrencyIncorrect_Test() {
+            TransferRequestDTO transferRequestDTO = new TransferRequestDTO();
+            when(repository.getCard("1234123412341234"))
+                    .thenReturn(Optional.of(new Card()
+                            .setValidTill("12/24")
+                            .setCvv("123")
+                            .setAccountNumber("1234123412341234")));
+            when(repository.getAccount("1234123412341234")).thenReturn(new Account()
+                    .setCurrency(Currency.RUR));
+
+            assertThrows(CardValidateException.class,
+                    () -> service.isRequestValid(transferRequestDTO
+                            .setCardFromNumber("1234123412341234")
+                            .setCardFromValidTill("12/24")
+                            .setCardFromCVV("123")
+                            .setAmount(new AmountDTO()
+                                    .setCurrency(Currency.EUR))),
+                    "Валюта счета списания не совпадает с валютой операции");
+        }
+
+        @Test
         void isRequestValid_OK_Test() {
             TransferRequestDTO transferRequestDTO = new TransferRequestDTO();
             when(repository.getCard("1234123412341234"))
-                    .thenReturn(Optional.of(new Card().setValidTill("12/24").setCvv("123")));
+                    .thenReturn(Optional.of(new Card()
+                            .setValidTill("12/24")
+                            .setCvv("123")
+                            .setAccountNumber("1234123412341234")));
+
+            when(repository.getAccount("1234123412341234"))
+                    .thenReturn(new Account()
+                            .setCurrency(Currency.RUR));
 
             when(repository.getCard("4321432143214321"))
-                    .thenReturn(Optional.of(new Card().setNumber("4321432143214321")));
+                    .thenReturn(Optional.of(new Card()
+                            .setNumber("4321432143214321")));
 
             assertTrue(service.isRequestValid(transferRequestDTO
                     .setCardFromNumber("1234123412341234")
                     .setCardFromValidTill("12/24")
                     .setCardFromCVV("123")
+                    .setAmount(new AmountDTO()
+                            .setCurrency(Currency.RUR))
                     .setCardToNumber("4321432143214321")));
         }
     }
@@ -121,15 +149,17 @@ class CardTransferServiceTest {
     }
 
     @Nested
-    class CardToCardTransferTest {
+    class CreateTransferOperationTest {
         @Test
-        void cardToCardTransfer_OK_Test() throws IOException {
+        void createTransferOperation_OK_Test() throws IOException {
             TransferRequestDTO transferRequestDTO = new TransferRequestDTO()
                     .setCardFromNumber("1234123412341234")
                     .setCardFromValidTill("12/24")
                     .setCardFromCVV("123")
                     .setCardToNumber("4321432143214321")
-                    .setAmount(new AmountDTO().setValue(1000));
+                    .setAmount(new AmountDTO()
+                            .setCurrency(Currency.RUR)
+                            .setValue(1000));
 
             when(repository.getCard("1234123412341234"))
                     .thenReturn(Optional.ofNullable(new Card()
@@ -137,13 +167,16 @@ class CardTransferServiceTest {
                             .setAccountNumber("1234123412341234")
                             .setValidTill("12/24")
                             .setCvv("123")));
-            when(repository.getAccount("1234123412341234")).thenReturn(new Account().setValue(2000));
+            when(repository.getAccount("1234123412341234"))
+                    .thenReturn(new Account()
+                            .setCurrency(Currency.RUR)
+                            .setValue(2000));
 
             when(repository.getCard("4321432143214321"))
                     .thenReturn(Optional.ofNullable(new Card()
                             .setNumber("4321432143214321")));
 
-            service.cardToCardTransfer(transferRequestDTO);
+            service.createTransferOperation(transferRequestDTO);
             verify(repository, times(1)).createTransferOperation(transferRequestDTO);
         }
     }

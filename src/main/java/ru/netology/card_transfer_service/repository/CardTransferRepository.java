@@ -63,14 +63,10 @@ public class CardTransferRepository {
         return updateOperation.getOperationId();
     }
 
-    public void declineTransferOperation (UUID operationId) throws IOException {
+    public void declineTransferOperation(UUID operationId) throws IOException {
         Operation updateOperation = operations.get(operationId);
         updateOperation.setStatus(OperationStatus.DECLINED);
         operations.put(updateOperation.getOperationId(), updateOperation);
         Logger.log(updateOperation.toString());
     }
-
-//    public boolean isTransferPossible (String cardNumber, int amount){
-//        return cards.get(cardNumber).getAccount().getValue() >= amount;
-//    }
 }
