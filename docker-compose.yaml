@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  card_transfer_service:
+    image: 'card_transfer_service:latest'
+    build: ./
+    ports:
+      - 5500:5500

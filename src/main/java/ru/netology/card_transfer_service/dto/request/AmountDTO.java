@@ -5,9 +5,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Value;
+import lombok.experimental.Accessors;
 import ru.netology.card_transfer_service.domain.Enums.Currency;
 
 @Data
+@Accessors(chain = true)
 public class AmountDTO {
 
     @Min(value = 0, message = "Сумма перевода (value) не может быть отрицательной")

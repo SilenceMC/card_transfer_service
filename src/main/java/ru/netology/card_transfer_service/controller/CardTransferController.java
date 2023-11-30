@@ -28,7 +28,7 @@ public class CardTransferController {
 
     @PostMapping("/transfer")
     public Status200ResponseDTO transfer(@RequestBody @Validated TransferRequestDTO transferRequestDto) throws IOException {
-        return service.cardToCardTransfer(transferRequestDto);
+        return service.createTransferOperation(transferRequestDto);
     }
 
     @PostMapping("/confirmOperation")
