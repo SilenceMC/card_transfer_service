@@ -5,9 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Value;
 import lombok.experimental.Accessors;
-import ru.netology.card_transfer_service.domain.Enums.Currency;
+import ru.netology.card_transfer_service.domain.enums.Currency;
 
 @Data
 @Accessors(chain = true)

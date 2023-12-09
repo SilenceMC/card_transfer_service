@@ -1,10 +1,10 @@
 package ru.netology.card_transfer_service.util.mapper;
 
-import ru.netology.card_transfer_service.dto.response.Status400ResponseDTO;
+import ru.netology.card_transfer_service.dto.response.ClientErrorDTO;
 
 
 public class Status400ResponseDTOMapper {
-    public static Status400ResponseDTO toDto(String message, int id){
-        return new Status400ResponseDTO(message, id);
+    public static ClientErrorDTO toDto(String message, int id) {
+        return new ClientErrorDTO(message, id);
     }
 }

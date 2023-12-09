@@ -3,12 +3,10 @@ package ru.netology.card_transfer_service.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import ru.netology.card_transfer_service.domain.Enums.Currency;
-import ru.netology.card_transfer_service.domain.Enums.OperationStatus;
+import ru.netology.card_transfer_service.domain.enums.Currency;
+import ru.netology.card_transfer_service.domain.enums.OperationStatus;
 import ru.netology.card_transfer_service.dto.request.TransferRequestDTO;
-import ru.netology.card_transfer_service.repository.CardTransferRepository;
 
-import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -44,6 +42,6 @@ public class Operation {
                 " с карты " + cardFromNumber +
                 " на карту " + cardToNumber +
                 " в размере " + amount + currency +
-                " в статусе: " + status.getlabel() + '\n';
+                " в статусе: " + status.getLabel() + '\n';
     }
 }

@@ -1,13 +1,14 @@
 package ru.netology.card_transfer_service.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.netology.card_transfer_service.domain.Account;
 import ru.netology.card_transfer_service.domain.Card;
-import ru.netology.card_transfer_service.domain.Enums.OperationStatus;
+import ru.netology.card_transfer_service.domain.enums.OperationStatus;
 import ru.netology.card_transfer_service.domain.Operation;
 import ru.netology.card_transfer_service.dto.request.ConfirmOperationDTO;
 import ru.netology.card_transfer_service.dto.request.TransferRequestDTO;
-import ru.netology.card_transfer_service.dto.response.Status200ResponseDTO;
+import ru.netology.card_transfer_service.dto.response.SuccessDTO;
 import ru.netology.card_transfer_service.exception.CardValidateException;
 import ru.netology.card_transfer_service.exception.OperationException;
 import ru.netology.card_transfer_service.repository.CardTransferRepository;
@@ -17,13 +18,10 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CardTransferService {
 
     private final CardTransferRepository repository;
-
-    public CardTransferService(CardTransferRepository repository) {
-        this.repository = repository;
-    }
 
     public boolean isRequestValid(TransferRequestDTO transferRequestDTO) {
         Optional<Card> cardFrom = repository.getCard(transferRequestDTO.getCardFromNumber());
@@ -52,14 +50,14 @@ public class CardTransferService {
     }
 
 
-    public Status200ResponseDTO createTransferOperation(TransferRequestDTO transferRequestDTO) throws IOException {
+    public SuccessDTO createTransferOperation(TransferRequestDTO transferRequestDTO) throws IOException {
         if (isRequestValid(transferRequestDTO) & isTransferPossible(transferRequestDTO)) {
             return Status200ResponseDTOMapper.toDto(repository.createTransferOperation(transferRequestDTO));
         }
         return null;
     }
 
-    public synchronized Status200ResponseDTO confirmTransferOperation(ConfirmOperationDTO confirmOperationDTO) throws IOException {
+    public synchronized SuccessDTO confirmTransferOperation(ConfirmOperationDTO confirmOperationDTO) throws IOException {
         Optional<Operation> operation = repository.getOperation(confirmOperationDTO.getOperationId());
         if (operation.isEmpty())
             throw new OperationException("Нет операции перевода с указанным operationId");

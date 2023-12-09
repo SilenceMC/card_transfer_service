@@ -5,10 +5,10 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class Status200ResponseDTO {
+public class SuccessDTO {
     private UUID operationId;
 
-    public Status200ResponseDTO(UUID operationId) {
+    public SuccessDTO(UUID operationId) {
         this.operationId = operationId;
     }
 }
