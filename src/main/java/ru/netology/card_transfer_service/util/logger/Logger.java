@@ -17,7 +17,7 @@ public class Logger {
         try {
             fileWriter = new FileWriter("logs.txt");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new Error(e);
         }
     }
 

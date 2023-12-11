@@ -21,6 +21,7 @@ public class Operation {
     private String cardToNumber;
     private int amount;
     private Currency currency;
+
     Random random = new Random();
 
     public Operation(TransferRequestDTO transferRequestDTO) {
@@ -29,10 +30,10 @@ public class Operation {
         this.confirmCode = "0000";
 //        Для ФТ код всегда равен "0000". Но реализация изначально подразумевала случайное 4-значеное число
 //        this.confirmCode = String.valueOf(random.nextInt(10000));
-        this.cardFromNumber = transferRequestDTO.getCardFromNumber();
-        this.cardToNumber = transferRequestDTO.getCardToNumber();
-        this.amount = transferRequestDTO.getAmount().getValue();
-        this.currency = transferRequestDTO.getAmount().getCurrency();
+        this.cardFromNumber = transferRequestDTO.cardFromNumber();
+        this.cardToNumber = transferRequestDTO.cardToNumber();
+        this.amount = transferRequestDTO.amount().value();
+        this.currency = transferRequestDTO.amount().currency();
 
     }
 
