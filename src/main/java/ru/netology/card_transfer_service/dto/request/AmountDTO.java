@@ -4,21 +4,19 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import lombok.Value;
 import lombok.experimental.Accessors;
-import ru.netology.card_transfer_service.domain.Enums.Currency;
+import ru.netology.card_transfer_service.domain.enums.Currency;
+import ru.netology.card_transfer_service.exception.CardValidateException;
 
-@Data
+
 @Accessors(chain = true)
-public class AmountDTO {
+public record AmountDTO(
+        @Min(value = 1, message = "Сумма перевода не может быть отрицательной или равной нулю")
+        int value,
 
-    @Min(value = 0, message = "Сумма перевода (value) не может быть отрицательной")
-    private int value;
-
-    @NotNull(message = "Код валюты (currency) не может быть null")
-    @NotBlank(message = "Код валюты (currency) не может быть пустым")
-    @Size(min = 3, max = 3, message = "Код валюты (currency) должен содержать 3 символа")
-    private Currency currency;
-
+        @NotNull(message = "Код валюты (currency) не может быть null")
+        @NotBlank(message = "Код валюты (currency) не может быть пустым")
+        @Size(min = 3, max = 3, message = "Код валюты (currency) должен содержать 3 символа")
+        Currency currency) {
 }

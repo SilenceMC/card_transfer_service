@@ -3,12 +3,10 @@ package ru.netology.card_transfer_service.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import ru.netology.card_transfer_service.domain.Enums.Currency;
-import ru.netology.card_transfer_service.domain.Enums.OperationStatus;
+import ru.netology.card_transfer_service.domain.enums.Currency;
+import ru.netology.card_transfer_service.domain.enums.OperationStatus;
 import ru.netology.card_transfer_service.dto.request.TransferRequestDTO;
-import ru.netology.card_transfer_service.repository.CardTransferRepository;
 
-import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -23,6 +21,7 @@ public class Operation {
     private String cardToNumber;
     private int amount;
     private Currency currency;
+
     Random random = new Random();
 
     public Operation(TransferRequestDTO transferRequestDTO) {
@@ -31,10 +30,10 @@ public class Operation {
         this.confirmCode = "0000";
 //        Для ФТ код всегда равен "0000". Но реализация изначально подразумевала случайное 4-значеное число
 //        this.confirmCode = String.valueOf(random.nextInt(10000));
-        this.cardFromNumber = transferRequestDTO.getCardFromNumber();
-        this.cardToNumber = transferRequestDTO.getCardToNumber();
-        this.amount = transferRequestDTO.getAmount().getValue();
-        this.currency = transferRequestDTO.getAmount().getCurrency();
+        this.cardFromNumber = transferRequestDTO.cardFromNumber();
+        this.cardToNumber = transferRequestDTO.cardToNumber();
+        this.amount = transferRequestDTO.amount().value();
+        this.currency = transferRequestDTO.amount().currency();
 
     }
 
@@ -44,6 +43,6 @@ public class Operation {
                 " с карты " + cardFromNumber +
                 " на карту " + cardToNumber +
                 " в размере " + amount + currency +
-                " в статусе: " + status.getlabel() + '\n';
+                " в статусе: " + status.getLabel() + '\n';
     }
 }

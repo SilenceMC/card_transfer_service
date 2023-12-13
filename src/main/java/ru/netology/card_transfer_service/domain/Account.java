@@ -3,7 +3,7 @@ package ru.netology.card_transfer_service.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import ru.netology.card_transfer_service.domain.Enums.Currency;
+import ru.netology.card_transfer_service.domain.enums.Currency;
 
 @Data
 @Accessors(chain = true)
