@@ -13,7 +13,7 @@ import ru.netology.card_transfer_service.service.CardTransferServiceImpl;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/")
-public class CardTransferControllerImpl implements CardTransferController{
+public class CardTransferControllerImpl implements CardTransferController {
     private final CardTransferServiceImpl service;
 
     @SneakyThrows

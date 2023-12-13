@@ -9,7 +9,10 @@ import java.io.IOException;
 public interface CardTransferService {
 
     boolean isRequestValid(TransferRequestDTO transferRequestDTO);
+
     boolean isTransferPossible(TransferRequestDTO transferRequestDTO);
+
     SuccessDTO createTransferOperation(TransferRequestDTO transferRequestDTO) throws IOException;
+
     SuccessDTO confirmTransferOperation(ConfirmOperationDTO confirmOperationDTO) throws IOException;
 }

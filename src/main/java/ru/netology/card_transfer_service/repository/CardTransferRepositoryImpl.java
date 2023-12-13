@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class CardTransferRepositoryImpl implements CardTransferRepository{
+public class CardTransferRepositoryImpl implements CardTransferRepository {
     private Map<String, Card> cards = new ConcurrentHashMap<>();
     private Map<String, Account> accounts = new ConcurrentHashMap<>();
 

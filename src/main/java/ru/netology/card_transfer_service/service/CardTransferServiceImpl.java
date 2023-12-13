@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CardTransferServiceImpl implements CardTransferService{
+public class CardTransferServiceImpl implements CardTransferService {
 
     private final CardTransferRepositoryImpl repository;
 

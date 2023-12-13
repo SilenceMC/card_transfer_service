@@ -12,10 +12,15 @@ import java.util.UUID;
 
 public interface CardTransferRepository {
     Optional<Card> getCard(String cardNumber);
+
     Account getAccount(String accountNumber);
+
     UUID createTransferOperation(TransferRequestDTO transferRequestDto) throws IOException;
+
     Optional<Operation> getOperation(UUID operationId);
+
     UUID confirmTransferOperation(ConfirmOperationDTO confirmOperationDTO) throws IOException;
+
     void declineTransferOperation(UUID operationId) throws IOException;
 
 }
